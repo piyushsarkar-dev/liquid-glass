@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap");
+
+    .glass-container {
+      --glass-c-glass: #bbbbbc;
+      --glass-c-light: #fff;
+      --glass-c-dark: #000;
+
+      --glass-c-content: #224;
+      --glass-c-action: #0052f5;
+
+      --glass-c-bg: #e8e8e9;
+
+      --glass-reflex-dark: 1;
+      --glass-reflex-light: 1;
+
+      --glass-saturation: 150%;
+
+      font-size: 20px;
+      font-family: "DM Sans", sans-serif;
+      font-optical-sizing: auto;
+      background: var(--glass-c-bg);
+      color: var(--glass-c-content);
+
+      transition:
+        background 400ms cubic-bezier(1, 0, 0.4, 1),
+        color 400ms cubic-bezier(1, 0, 0.4, 1);
+
+      /* Ensure container fills screen if needed, or behaves like body */
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    .glass-container:has(input[value="dark"]:checked) {
+      --glass-c-glass: #bbbbbc;
+      --glass-c-light: #fff;
+      --glass-c-dark: #000;
+
+      --glass-c-content: #e1e1e1;
+      --glass-c-action: #03d5ff;
+
+      --glass-c-bg: #1b1b1d;
+
+      --glass-reflex-dark: 2;
+      --glass-reflex-light: 0.3;
+
+      --glass-saturation: 150%;
+    }
+
+    .glass-container:has(input[value="dim"]:checked) {
+      --glass-c-light: #99deff;
+      --glass-c-dark: #20001b;
+      --glass-c-glass: hsl(335 250% 74% / 1);
+
+      --glass-c-content: #d5dbe2;
+      --glass-c-action: #ff48a9;
+
+      --glass-c-bg: #152433;
+
+      --glass-reflex-dark: 2;
+      --glass-reflex-light: 0.7;
+
+      --glass-saturation: 200%;
+    }
+
+    .glass-switcher {
+      position: fixed;
+      z-index: 1000; /* Increased z-index for safety */
+      top: 40px;
+      left: 50%;
+      translate: -50%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 260px;
+      max-width: 260px;
+      height: 62px;
+      box-sizing: border-box;
+      padding: 6px 6px;
+      margin: 0 auto;
+      border: none;
+      border-radius: 99em;
+      font-size: 1rem;
+      background-color: color-mix(
+        in srgb,
+        var(--glass-c-glass) 12%,
+        transparent
+      );
+      backdrop-filter: blur(8px) url(#switcher)
+        saturate(var(--glass-saturation));
+      -webkit-backdrop-filter: blur(8px) saturate(var(--glass-saturation));
+      box-shadow:
+        inset 0 0 0 1px
+          color-mix(
+            in srgb,
+            var(--glass-c-light) calc(var(--glass-reflex-light) * 10%),
+            transparent
+          ),
+        inset 1.8px 3px 0px -2px
+          color-mix(
+            in srgb,
+            var(--glass-c-light) calc(var(--glass-reflex-light) * 90%),
+            transparent
+          ),
+        inset -2px -2px 0px -2px
+          color-mix(
+            in srgb,
+            var(--glass-c-light) calc(var(--glass-reflex-light) * 80%),
+            transparent
+          ),
+        inset -3px -8px 1px -6px
+          color-mix(
+            in srgb,
+            var(--glass-c-light) calc(var(--glass-reflex-light) * 60%),
+            transparent
+          ),
+        inset -0.3px -1px 4px 0px
+          color-mix(
+            in srgb,
+            var(--glass-c-dark) calc(var(--glass-reflex-dark) * 12%),
+            transparent
+          ),
+        inset -1.5px 2.5px 0px -2px
+          color-mix(
+            in srgb,
+            var(--glass-c-dark) calc(var(--glass-reflex-dark) * 20%),
+            transparent
+          ),
+        inset 0px 3px 4px -2px
+          color-mix(
+            in srgb,
+            var(--glass-c-dark) calc(var(--glass-reflex-dark) * 20%),
+            transparent
+          ),
+        inset 2px -6.5px 1px -4px
+          color-mix(
+            in srgb,
+            var(--glass-c-dark) calc(var(--glass-reflex-dark) * 10%),
+            transparent
+          ),
+        0px 1px 5px 0px
+          color-mix(
+            in srgb,
+            var(--glass-c-dark) calc(var(--glass-reflex-dark) * 10%),
+            transparent
+          ),
+        0px 6px 16px 0px
+          color-mix(
+            in srgb,
+            var(--glass-c-dark) calc(var(--glass-reflex-dark) * 8%),
+            transparent
+          );
+      transition:
+        background-color 400ms cubic-bezier(1, 0, 0.4, 1),
+        box-shadow 400ms cubic-bezier(1, 0, 0.4, 1);
+    }
+
+    .glass-switcher__legend {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      border: 0;
+      padding: 0;
+      white-space: nowrap;
+      clip-path: inset(100%);
+      clip: rect(0 0 0 0);
+      overflow: hidden;
+    }
+
+    .glass-switcher__input {
+      clip: rect(0 0 0 0);
+      clip-path: inset(100%);
+      height: 1px;
+      width: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+    }
+
+    .glass-switcher__icon {
+      display: block;
+      width: 20px;
+      height: 20px;
+      transition: scale 200ms cubic-bezier(0.5, 0, 0, 1);
+    }
+
+    .glass-switcher__filter {
+      position: absolute;
+      width: 0;
+      height: 0;
+      z-index: -1;
+    }
+
+    .glass-switcher__option {
+      --glass-c: var(--glass-c-content);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 16px;
+      width: 80px; /* Adjusted option width */
+      height: 100%;
+      box-sizing: border-box;
+      border-radius: 99em;
+      opacity: 1;
+      transition: all 160ms;
+    }
+
+    .glass-switcher__option:hover {
+      --glass-c: var(--glass-c-action);
+      cursor: pointer;
+    }
+
+    .glass-switcher__option:hover .glass-switcher__icon {
+      scale: 1.2;
+    }
+
+    .glass-switcher__option:has(input:checked) {
+      --glass-c: var(--glass-c-content);
+      cursor: auto;
+    }
+
+    .glass-switcher__option:has(input:checked) .glass-switcher__icon {
+      scale: 1;
+    }
+
+    .glass-switcher::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      display: block;
+      width: 82px; /* Adjusted knob width */
+      height: calc(100% - 8px);
+      border-radius: 99em;
+      background-color: color-mix(
+        in srgb,
+        var(--glass-c-glass) 36%,
+        transparent
+      );
+      z-index: -1;
+      box-shadow:
+        inset 0 0 0 1px
+          color-mix(
+            in srgb,
+            var(--glass-c-light) calc(var(--glass-reflex-light) * 10%),
+            transparent
+          ),
+        inset 2px 1px 0px -1px
+          color-mix(
+            in srgb,
+            var(--glass-c-light) calc(var(--glass-reflex-light) * 90%),
+            transparent
+          ),
+        inset -1.5px -1px 0px -1px
+          color-mix(
+            in srgb,
+            var(--glass-c-light) calc(var(--glass-reflex-light) * 80%),
+            transparent
+          ),
+        inset -2px -6px 1px -5px
+          color-mix(
+            in srgb,
+            var(--glass-c-light) calc(var(--glass-reflex-light) * 60%),
+            transparent
+          ),
+        inset -1px 2px 3px -1px
+          color-mix(
+            in srgb,
+            var(--glass-c-dark) calc(var(--glass-reflex-dark) * 20%),
+            transparent
+          ),
+        inset 0px -4px 1px -2px
+          color-mix(
+            in srgb,
+            var(--glass-c-dark) calc(var(--glass-reflex-dark) * 10%),
+            transparent
+          ),
+        0px 3px 6px 0px
+          color-mix(
+            in srgb,
+            var(--glass-c-dark) calc(var(--glass-reflex-dark) * 8%),
+            transparent
+          );
+    }
+
+    .glass-switcher:has(input[data-glass-option="1"]:checked)::after {
+      translate: 0 0;
+      transform-origin: right;
+      transition:
+        background-color 400ms cubic-bezier(1, 0, 0.4, 1),
+        box-shadow 400ms cubic-bezier(1, 0, 0.4, 1),
+        translate 400ms cubic-bezier(1, 0, 0.4, 1);
+      animation: glassScaleToggle 440ms ease;
+    }
+
+    .glass-switcher:has(input[data-glass-option="2"]:checked)::after {
+      translate: 86px 0; /* Updated translate */
+      transition:
+        background-color 400ms cubic-bezier(1, 0, 0.4, 1),
+        box-shadow 400ms cubic-bezier(1, 0, 0.4, 1),
+        translate 400ms cubic-bezier(1, 0, 0.4, 1);
+      animation: glassScaleToggle2 440ms ease;
+    }
+
+    .glass-switcher[data-glass-previous="1"]:has(
+        input[data-glass-option="2"]:checked
+      )::after {
+      transform-origin: left;
+    }
+
+    .glass-switcher[data-glass-previous="3"]:has(
+        input[data-glass-option="2"]:checked
+      )::after {
+      transform-origin: right;
+    }
+
+    .glass-switcher:has(input[data-glass-option="3"]:checked)::after {
+      translate: 172px 0; /* Updated translate */
+      transform-origin: left;
+      transition:
+        background-color 400ms cubic-bezier(1, 0, 0.4, 1),
+        box-shadow 400ms cubic-bezier(1, 0, 0.4, 1),
+        translate 400ms cubic-bezier(1, 0, 0.4, 1);
+      animation: glassScaleToggle3 440ms ease;
+    }
+
+    @keyframes glassScaleToggle {
+      0% {
+        scale: 1 1;
+      }
+      50% {
+        scale: 1.1 1;
+      }
+      100% {
+        scale: 1 1;
+      }
+    }
+
+    @keyframes glassScaleToggle2 {
+      0% {
+        scale: 1 1;
+      }
+      50% {
+        scale: 1.2 1;
+      }
+      100% {
+        scale: 1 1;
+      }
+    }
+
+    @keyframes glassScaleToggle3 {
+      0% {
+        scale: 1 1;
+      }
+      50% {
+        scale: 1.1 1;
+      }
+      100% {
+        scale: 1 1;
+      }
+    }
+  </style>
+  <body style="margin: 0; padding: 0">
+    <div class="glass-container">
+      <fieldset class="glass-switcher">
+        <legend class="glass-switcher__legend">Choose theme</legend>
+        <label class="glass-switcher__option">
+          <input
+            class="glass-switcher__input"
+            type="radio"
+            name="glass-theme"
+            value="light"
+            data-glass-option="1"
+            checked />
+          <svg
+            class="glass-switcher__icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 0 0 0-1 1v8" />
+            <path
+              d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          </svg>
+        </label>
+        <label class="glass-switcher__option">
+          <input
+            class="glass-switcher__input"
+            type="radio"
+            name="glass-theme"
+            value="dark"
+            data-glass-option="2" />
+          <svg
+            class="glass-switcher__icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M16 5H3" />
+            <path d="M11 12H3" />
+            <path d="M11 19H3" />
+            <path d="M21 16V5" />
+            <circle
+              cx="18"
+              cy="16"
+              r="3" />
+          </svg>
+        </label>
+        <label class="glass-switcher__option">
+          <input
+            class="glass-switcher__input"
+            type="radio"
+            name="glass-theme"
+            value="dim"
+            data-glass-option="3" />
+          <svg
+            class="glass-switcher__icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle
+              cx="12"
+              cy="8"
+              r="5" />
+            <path d="M20 21a8 8 0 0 0-16 0" />
+          </svg>
+        </label>
+      </fieldset>
+    </div>
+  </body>
+</html>
