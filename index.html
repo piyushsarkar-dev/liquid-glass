@@ -17,6 +17,8 @@
         --c-content: #224;
         --c-action: #0052f5;
 
+        --c-switcher: #224;
+
         --c-bg: #e8e8e9;
 
         --glass-reflex-dark: 1;
@@ -43,8 +45,6 @@
         --c-content: #e1e1e1;
         --c-action: #03d5ff;
 
-        --c-bg: #1b1b1d;
-
         --glass-reflex-dark: 2;
         --glass-reflex-light: 0.3;
 
@@ -54,12 +54,9 @@
       body:has(input[value="dim"]:checked) {
         --c-light: #99deff;
         --c-dark: #20001b;
-        --c-glass: hsl(335 250% 74% / 1);
 
         --c-content: #d5dbe2;
         --c-action: #ff48a9;
-
-        --c-bg: #152433;
 
         --glass-reflex-dark: 2;
         --glass-reflex-light: 0.7;
@@ -183,15 +180,9 @@
         transition: scale 200ms cubic-bezier(0.5, 0, 0, 1);
       }
 
-      .switcher__filter {
-        position: absolute;
-        width: 0;
-        height: 0;
-        z-index: -1;
-      }
-
       .switcher__option {
-        --c: var(--c-content);
+        --c: var(--c-switcher);
+        color: var(--c);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -214,7 +205,7 @@
       }
 
       .switcher__option:has(input:checked) {
-        --c: var(--c-content);
+        --c: var(--c-switcher);
         cursor: auto;
       }
 
