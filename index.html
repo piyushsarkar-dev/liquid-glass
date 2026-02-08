@@ -17,6 +17,8 @@
         --c-content: #224;
         --c-action: #0052f5;
 
+        --c-switcher: #224;
+
         --c-bg: #e8e8e9;
 
         --glass-reflex-dark: 1;
@@ -187,7 +189,8 @@
       }
 
       .switcher__option {
-        --c: var(--c-content);
+        --c: var(--c-switcher);
+        color: var(--c);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -210,7 +213,7 @@
       }
 
       .switcher__option:has(input:checked) {
-        --c: var(--c-content);
+        --c: var(--c-switcher);
         cursor: auto;
       }
 
